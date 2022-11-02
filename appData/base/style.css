@@ -1,0 +1,20 @@
+*{
+    color: #000000;
+    background-color: rgb(230, 230, 230);
+}
+
+#treeView, #codeEdit, #tabWidget, #console{
+    background-color: #ffffff;
+}
+
+#startButton, #stopButton{
+    background-color: rgb(240, 240, 240);
+}
+
+#startButton:pressed, #stopButton:pressed{
+    background-color: rgb(230, 230, 230);
+}
+
+QMenu::item:selected {
+    background-color: rgb(85, 113, 210); /* sets background of the menu */
+}

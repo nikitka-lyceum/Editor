@@ -1,0 +1,43 @@
+{
+  "keyboard": "#443999",
+  "keyboardPattern": [
+    "\\band\\b",
+    "\\bassert\\b",
+    "\\bbreak\\b",
+    "\\bclass\\b",
+    "\\bcontinue\\b",
+    "\\bdef\\b",
+    "\\bdel\\b",
+    "\\belif\\b",
+    "\\belse\\b",
+    "\\bexcept\\b",
+    "\\bexec\\b",
+    "\\bfinally\\b",
+    "\\bfor\\b",
+    "\\bfrom\\b",
+    "\\bglobal\\b",
+    "\\bif\\b",
+    "\\bimport\\b",
+    "\\bin\\b",
+    "\\bis\\b",
+    "\\blambda\\b",
+    "\\bnot\\b",
+    "\\bor\\b",
+    "\\bpass\\b",
+    "\\bprint\\b",
+    "\\braise\\b",
+    "\\breturn\\b",
+    "\\btry\\b",
+    "\\bwhile\\b",
+    "\\byield\\b",
+    "\\bNone\\b",
+    "\\bTrue\\b",
+    "\\bFalse\\b"
+  ],
+  "class": "#443999",
+  "multiLineComment": "#6e6e6e",
+  "quotation": "#2c9946",
+  "function": "#771091"
+}
+
+
