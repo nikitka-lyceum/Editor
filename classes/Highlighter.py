@@ -23,6 +23,11 @@ class Highlighter(QtGui.QSyntaxHighlighter):
         self.highlightingRules.append((QtCore.QRegExp("\\bQ[A-Za-z]+\\b"),
                                        classFormat))
 
+        classFormat = QtGui.QTextCharFormat()
+        classFormat.setForeground(QColor(colors["class"]))
+        self.highlightingRules.append((QtCore.QRegExp("\\b[A-Z][A-Za-z]+\\b"),
+                                       classFormat))
+
         self.multiLineCommentFormat = QtGui.QTextCharFormat()
         self.multiLineCommentFormat.setForeground(QColor(colors["multiLineComment"]))
 

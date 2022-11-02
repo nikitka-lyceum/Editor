@@ -78,7 +78,7 @@ class EditorCode(QMainWindow):
         # Set Widget Settings
         self.set_icons()
         self.set_commands()
-        self.load_settings()
+        self.load_settings(["file_path", "file_type", "dir_path", "theme"])
         self.open_file()
         self.open_folder()
 
@@ -90,13 +90,11 @@ class EditorCode(QMainWindow):
             self.file_path = path
             self.open_file()
 
-    def load_settings(self):
+    def load_settings(self, toRecord):
         with open(pathAppData + "settings.json", encoding="utf-8") as sett_file:
             settings = json.loads(sett_file.read())
-            self.file_path = settings["file_path"]
-            self.file_type = settings["file_type"]
-            self.dir_path = settings["dir_path"]
-            self.theme = settings["theme"]
+            for item in toRecord:
+                exec(f"self.{item} = settings['{item}']")
 
     def write_settings(self):
         with open(pathAppData + "settings.json", mode="w", encoding="utf-8") as sett_file:
@@ -217,8 +215,7 @@ class EditorCode(QMainWindow):
         self.save_file()
 
         # Load Updating Settings
-        # self.load_settings()
-
+        self.load_settings(["theme"])
 
         # Set Window Title
         if len(self.file_path) > 0 and os.path.exists(self.file_path):
@@ -230,7 +227,8 @@ class EditorCode(QMainWindow):
         self.file_type = os.path.splitext(self.file_path)[-1]
 
         # Set Widget Color Scheme
-        self.setStyleSheet(self.cur_color.execute("""SELECT colors FROM widget_themes""").fetchall()[0][0])
+        self.setStyleSheet(
+            self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0])
 
         try:
             # Try Get Code Color Scheme

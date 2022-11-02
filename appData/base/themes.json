@@ -34,7 +34,7 @@
     "\\bTrue\\b",
     "\\bFalse\\b"
   ],
-  "class": "#443999",
+  "class": "#ffffff",
   "multiLineComment": "#6e6e6e",
   "quotation": "#008000",
   "function": "#873e23"

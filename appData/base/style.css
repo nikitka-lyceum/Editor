@@ -1,14 +1,14 @@
 *{
-    color: #000000;
-    background-color: rgb(230, 230, 230);
+    color: #ffffff;
+    background-color: #737373;
 }
 
-#treeView, #codeEdit, #tabWidget, #console{
-    background-color: #ffffff;
+#treeView, #codeEdit, #tabWidget, #console, QHeaderView::section, QTabBar::tab:selected, QTabBar::tab:hover{
+    background-color: #000000;
 }
 
-#startButton, #stopButton{
-    background-color: rgb(240, 240, 240);
+#startButton, #stopButton, QTabWidget::pane, QTabWidget::tab-bar, QTabBar::tab{
+    background-color: #737373;
 }
 
 #startButton:pressed, #stopButton:pressed{
@@ -16,5 +16,5 @@
 }
 
 QMenu::item:selected {
-    background-color: rgb(85, 113, 210); /* sets background of the menu */
+    background-color: rgb(85, 113, 210);
 }
