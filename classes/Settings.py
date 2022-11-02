@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QIcon, QFontInfo
 from PyQt5 import uic
 
-from config import pathAppData, pathBaseTheme, WINDOW_ICON_PATH
+from config import pathAppData, pathBaseTheme, WINDOW_ICON_PATH, allStyles
 
 import json
 
@@ -24,6 +24,8 @@ class Settings(QWidget):
             self.dir_path = settings["dir_path"]
             self.theme = settings["theme"]
 
+        self.styleList.addItems(allStyles)
+
     def write_settings(self):
         with open(pathAppData + "settings.json", mode="w", encoding="utf-8") as sett_file:
             data = {
@@ -34,12 +36,22 @@ class Settings(QWidget):
             }
             json.dump(data, sett_file, indent=4)
 
+    def applySettings(self):
+        self.theme = self.styleList.currentText()
+        # Close Settings Window
+        self.close()
+
+
     def set_icons(self):
         # Window
         self.setWindowIcon(QIcon(WINDOW_ICON_PATH))
 
     def set_commands(self):
-        pass
+        self.applyButton.clicked.connect(self.applySettings)
+        self.canselButton.clicked.connect(lambda func: self.close())
 
     def closeEvent(self, a0):
         self.write_settings()
+
+        print()
+

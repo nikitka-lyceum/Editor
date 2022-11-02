@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>423</height>
+    <width>362</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,12 +16,15 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="tabPosition">
+      <enum>QTabWidget::North</enum>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="styleTab">
       <attribute name="title">
-       <string>Style Code</string>
+       <string>Style</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -34,49 +37,61 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>334</width>
-            <height>328</height>
+            <width>318</width>
+            <height>316</height>
            </rect>
           </property>
-          <widget class="QLabel" name="label">
+          <widget class="QWidget" name="horizontalLayoutWidget">
            <property name="geometry">
             <rect>
-             <x>0</x>
-             <y>20</y>
-             <width>47</width>
-             <height>13</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-          <widget class="QComboBox" name="comboBox">
-           <property name="geometry">
-            <rect>
-             <x>150</x>
-             <y>20</y>
-             <width>171</width>
+             <x>9</x>
+             <y>9</y>
+             <width>301</width>
              <height>22</height>
             </rect>
            </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Style</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="styleList"/>
+            </item>
+           </layout>
           </widget>
-          <widget class="QFontComboBox" name="fontComboBox">
+          <widget class="QWidget" name="horizontalLayoutWidget_2">
            <property name="geometry">
             <rect>
-             <x>150</x>
-             <y>70</y>
-             <width>187</width>
+             <x>10</x>
+             <y>40</y>
+             <width>301</width>
              <height>22</height>
             </rect>
            </property>
-           <property name="font">
-            <font>
-             <family>Gadugi</family>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Font Code</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFontComboBox" name="fontList">
+              <property name="font">
+               <font>
+                <family>Gadugi</family>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </widget>

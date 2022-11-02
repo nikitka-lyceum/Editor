@@ -216,6 +216,10 @@ class EditorCode(QMainWindow):
         # Save Changes
         self.save_file()
 
+        # Load Updating Settings
+        # self.load_settings()
+
+
         # Set Window Title
         if len(self.file_path) > 0 and os.path.exists(self.file_path):
             self.currentFile.setText(f" {self.file_path}")
@@ -269,8 +273,6 @@ class EditorCode(QMainWindow):
             code = self.cur_control_point.execute(
                 """SELECT code FROM points WHERE file_type=? AND file_path=?""",
                 (self.file_type, self.file_path)).fetchall()
-
-            print(self.file_path, self.file_type)
 
             # Check Record
             if len(code) != 0:

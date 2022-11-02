@@ -1,2 +1,6 @@
-for i in range(500):
-	print(i)
+def main():
+    pass
+
+
+if __name__ == '__main__':
+    main()

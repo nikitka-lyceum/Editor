@@ -1,5 +1,5 @@
 {
-  "keyboard": "#443999",
+  "keyboard": "#CBD646",
   "keyboardPattern": [
     "\\band\\b",
     "\\bassert\\b",
@@ -36,8 +36,8 @@
   ],
   "class": "#443999",
   "multiLineComment": "#6e6e6e",
-  "quotation": "#2c9946",
-  "function": "#771091"
+  "quotation": "#008000",
+  "function": "#873e23"
 }
 
 
