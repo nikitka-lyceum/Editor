@@ -1,14 +1,14 @@
 *{
     color: #ffffff;
-    background-color: #737373;
+    background-color: #3c3f41;
 }
 
 #treeView, #codeEdit, #tabWidget, #console, QHeaderView::section, QTabBar::tab:selected, QTabBar::tab:hover{
-    background-color: #000000;
+    background-color:  #272822;
 }
 
 #startButton, #stopButton, QTabWidget::pane, QTabWidget::tab-bar, QTabBar::tab{
-    background-color: #737373;
+    background-color: #3c3f41;
 }
 
 #startButton:pressed, #stopButton:pressed{
@@ -17,4 +17,13 @@
 
 QMenu::item:selected {
     background-color: rgb(85, 113, 210);
+}
+
+QTabWidget::pane {
+    border-top: 1px solid #C2C7CB;
+}
+
+#applyButton{
+    background-color: #365880;
+    color: #ffffff;
 }

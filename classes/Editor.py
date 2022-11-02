@@ -6,7 +6,7 @@ import subprocess
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, QTabWidget
 from PyQt5.QtGui import QIcon
-from PyQt5 import uic, QtWidgets, Qt, QtCore
+from PyQt5 import uic, QtWidgets, Qt, QtCore, QtGui
 
 from config import pathAppData, pathBaseTheme, WINDOW_ICON_PATH, pathBaseControlPoint
 
@@ -39,6 +39,7 @@ class EditorCode(QMainWindow):
         self.file_type = ""
         self.dir_path = ""
         self.theme = "standard"
+        self.font_family = ""
 
         # Open Base Colors
         self.con_color = sqlite3.connect(pathBaseTheme, check_same_thread=False)
@@ -63,10 +64,10 @@ class EditorCode(QMainWindow):
                     code TEXT
                 )""")
 
-        # Update Code
+        # Update
         self.timer = QTimer()
         self.timer.setInterval(500)
-        self.timer.timeout.connect(self.updateFile)
+        self.timer.timeout.connect(self.updateWindow)
         self.timer.start()
 
         # Set Console Settings
@@ -78,16 +79,19 @@ class EditorCode(QMainWindow):
         # Set Widget Settings
         self.set_icons()
         self.set_commands()
-        self.load_settings(["file_path", "file_type", "dir_path", "theme"])
+        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family"])
         self.open_file()
         self.open_folder()
 
-        self.treeView.setFixedWidth(300)
+        self.setBackgroundRole(QtGui.QPalette.Highlight)
+
+        # self.treeView.setFixedWidth(300)
 
     def selectFile(self, index):
         path = self.sender().model().filePath(index)
         if os.path.isfile(path):
             self.file_path = path
+            self.file_type = os.path.splitext(self.file_path)[-1]
             self.open_file()
 
     def load_settings(self, toRecord):
@@ -102,20 +106,21 @@ class EditorCode(QMainWindow):
                 "file_path": self.file_path,
                 "file_type": self.file_type,
                 "dir_path": self.dir_path,
-                "theme": self.theme
+                "theme": self.theme,
+                "font_family": self.font_family
             }
             json.dump(data, sett_file, indent=4)
 
     def create_file(self):
         if self.sender().text() == "Python File":
-            name, ok_pressed = QInputDialog().getText(self, "Новый Python файл", "")
+            name, ok_pressed = QInputDialog().getText(self, "New Python file", "")
 
             if ".py" not in name[-2:]:
                 self.file_type = ".py"
                 name += ".py"
 
         elif self.sender().text() == "Other File":
-            name, ok_pressed = QInputDialog().getText(self, "Новый файл", "")
+            name, ok_pressed = QInputDialog().getText(self, "New File", "")
 
         else:
             ok_pressed = False
@@ -130,8 +135,11 @@ class EditorCode(QMainWindow):
 
     def save_file(self):
         try:
-            if self.sender().text() == "Save as" and self.file_path == "":
-                self.file_path, self.file_type = QFileDialog.getSaveFileName(self, "Сохранить как")
+            if self.sender().text() == "Save" and self.file_path == "":
+                self.file_path, self.file_type = QFileDialog.getSaveFileName(self,
+                                                                             "Save as",
+                                                                             options=QFileDialog.DontUseNativeDialog
+                                                                             )
         except Exception:
             pass
 
@@ -143,14 +151,16 @@ class EditorCode(QMainWindow):
         try:
             if self.sender().text() == "Python File":
                 self.file_path, self.file_type = QFileDialog.getOpenFileName(self,
-                                                                             'Выбрать python файл',
+                                                                             'Select python file',
                                                                              '',
-                                                                             filter="*.py")
+                                                                             filter="*.py",
+                                                                             options=QFileDialog.DontUseNativeDialog)
 
             elif self.sender().text() == "File":
                 self.file_path, self.file_type = QFileDialog.getOpenFileName(self,
-                                                                             'Выбрать python файл',
-                                                                             '')
+                                                                             'Select File',
+                                                                             '',
+                                                                             options=QFileDialog.DontUseNativeDialog)
 
         except Exception:
             pass
@@ -165,7 +175,11 @@ class EditorCode(QMainWindow):
     def open_folder(self):
         if not (self.sender() is None):
             if self.sender().text() == "Folder":
-                dir = QFileDialog.getExistingDirectory(None, "Выберите директорию", self.dir_path)
+                dir = QFileDialog.getExistingDirectory(self,
+                                                       "Select Project",
+                                                       self.dir_path,
+                                                       options=QFileDialog.DontUseNativeDialog
+                                                       )
                 if dir != "":
                     self.dir_path = dir
 
@@ -209,13 +223,14 @@ class EditorCode(QMainWindow):
         self.codeEdit.clear()
 
         self.open_folder()
+        self.write_settings()
 
-    def updateFile(self):
+    def updateWindow(self):
         # Save Changes
         self.save_file()
 
         # Load Updating Settings
-        self.load_settings(["theme"])
+        self.load_settings(["theme", "font_family"])
 
         # Set Window Title
         if len(self.file_path) > 0 and os.path.exists(self.file_path):
@@ -227,8 +242,16 @@ class EditorCode(QMainWindow):
         self.file_type = os.path.splitext(self.file_path)[-1]
 
         # Set Widget Color Scheme
-        self.setStyleSheet(
-            self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0])
+        widget_colors = \
+        self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0]
+        self.setStyleSheet(widget_colors)
+
+        # Set Font
+        self.codeEdit.setStyleSheet(f"font-family: {self.font_family}")
+        self.console.setStyleSheet(f"font-family: {self.font_family}")
+
+        # Data Transfer To Settings
+        self.settApp.colors = widget_colors
 
         try:
             # Try Get Code Color Scheme
@@ -241,7 +264,13 @@ class EditorCode(QMainWindow):
             self.highlight = Highlighter(self.codeEdit.document(), colors=colors)
 
         except Exception:
-            pass
+            quotation_color = self.styleSheet().split("\n")[1].split()[-1].replace(";", "")
+            self.highlight = Highlighter(self.codeEdit.document(), colors={"keyboard": "#000000",
+                                                                           "keyboardPattern": [],
+                                                                           "class": "#000000",
+                                                                           "multiLineComment": "#000000",
+                                                                           "quotation": quotation_color,
+                                                                           "function": "#000000"})
 
     def createControlPoint(self):
         try:
@@ -317,6 +346,8 @@ class EditorCode(QMainWindow):
     def closeEvent(self, a0):
         self.save_file()
         self.write_settings()
+
+        self.settApp.close()
 
         self.con_color.close()
         self.con_control_point.close()

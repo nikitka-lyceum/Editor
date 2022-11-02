@@ -1,9 +1,5 @@
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from classes.Editor import EditorCode
+def main(self):
+	print(self)
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    codeEditor = EditorCode()
-    codeEditor.show()
-    sys.exit(app.exec())
+	main("qwerty")

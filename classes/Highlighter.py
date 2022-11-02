@@ -46,8 +46,8 @@ class Highlighter(QtGui.QSyntaxHighlighter):
         self.highlightingRules.append((QtCore.QRegExp("\\b[A-Za-z0-9_]+(?=\\()"),
                                        functionFormat))
 
-        self.commentStartExpression = QtCore.QRegExp("#")
-        self.commentEndExpression = QtCore.QRegExp("*\\n")
+        self.commentStartExpression = QtCore.QRegExp("/\\*")
+        self.commentEndExpression = QtCore.QRegExp("\\*/")
 
     def highlightBlock(self, text):
         for pattern, format in self.highlightingRules:
