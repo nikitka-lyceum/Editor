@@ -1,5 +1,4 @@
 from PyQt5 import QtGui, QtCore
-from PyQt5 import Qt
 from PyQt5.QtGui import QColor
 
 

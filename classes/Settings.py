@@ -1,9 +1,9 @@
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QIcon, QFontInfo, QFont
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5 import uic
 
-from config import pathAppData, pathBaseTheme, WINDOW_ICON_PATH, allStyles
+from config import pathAppData, WINDOW_ICON_PATH, allStyles
 
 import json
 
