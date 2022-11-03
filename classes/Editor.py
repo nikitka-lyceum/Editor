@@ -16,17 +16,10 @@ from classes.Settings import Settings
 from pyqtconsole.console import PythonConsole
 
 
-class EmbTerminal(QtWidgets.QWidget):
+class PipConsole(QtWidgets.QTextEdit):
     def __init__(self, parent=None):
-        super(EmbTerminal, self).__init__(parent)
-        self.process = QtCore.QProcess(self)
-        self.terminal = QtWidgets.QWidget(self)
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.terminal)
-        # Works also with urxvt:
-        self.process.start('cmd',
-                           ['-into', str(self.terminal.winId()),
-                            '-e', 'tmux', 'new', '-s', 'my_session'])
+        super().__init__(parent)
+
 
 
 class EditorCode(QMainWindow):
@@ -73,7 +66,7 @@ class EditorCode(QMainWindow):
         # Set Console Settings
         self.tabWidget: QTabWidget = self.tabWidget
         self.tabWidget.removeTab(1)
-        self.tabWidget.addTab(PythonConsole(), "Python Console")
+        self.tabWidget.addTab(PipConsole(), "Python Console")
         self.tabWidget.setFixedHeight(180)
 
         # Set Widget Settings
@@ -202,7 +195,7 @@ class EditorCode(QMainWindow):
         else:
             command = f"python {self.file_path}"
             self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                            shell=True)
+                                            shell=True, start_new_session=True)
             output, error = self.process.communicate()
             if error is None:
                 error = ""
