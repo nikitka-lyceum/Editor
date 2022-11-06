@@ -1,6 +1,3 @@
-def main(self):
-	print(self)
+import os
 
-
-main(5)
-
+print(os.popen("python -V").read())
