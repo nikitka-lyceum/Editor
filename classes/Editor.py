@@ -251,7 +251,6 @@ class EditorCode(QMainWindow):
         self.console.setStyleSheet(f"font-family: {self.font_family};")
         self.pipConsole.setStyleSheet(f"font-family: {self.font_family}; font-size: 12px;")
         self.pipConsole.setStyleSheet("font-size: 12;")
-        print(self.pipConsole.styleSheet())
 
         # Data Transfer To Settings
         self.settApp.colors = widget_colors
