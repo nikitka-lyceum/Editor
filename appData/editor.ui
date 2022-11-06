@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1125</width>
-    <height>566</height>
+    <width>1098</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,11 +74,20 @@
     </item>
     <item>
      <widget class="QTabWidget" name="tabWidget_2">
+      <property name="styleSheet">
+       <string notr="true">border-color: #000000;</string>
+      </property>
       <property name="tabPosition">
        <enum>QTabWidget::West</enum>
       </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Triangular</enum>
+      </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -117,6 +126,9 @@
     </item>
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="tabShape">
+       <enum>QTabWidget::Triangular</enum>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -146,12 +158,13 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1125</width>
+     <width>1098</width>
      <height>21</height>
     </rect>
    </property>
@@ -167,6 +180,20 @@
    <property name="nativeMenuBar">
     <bool>true</bool>
    </property>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionFind"/>
+    <addaction name="actionCreate_Control_Point"/>
+    <addaction name="actionLoad_Control_Point"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionInstruction_Git"/>
+   </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
      <string>File</string>
@@ -195,25 +222,10 @@
     <addaction name="separator"/>
     <addaction name="actionExit_2"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit</string>
-    </property>
-    <addaction name="actionFind"/>
-    <addaction name="actionCreate_Control_Point"/>
-    <addaction name="actionLoad_Control_Point"/>
-   </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionInstruction_Git"/>
-   </widget>
    <addaction name="menu"/>
    <addaction name="menuEdit"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave">
    <property name="text">
     <string>New...</string>

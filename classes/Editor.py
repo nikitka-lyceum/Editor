@@ -3,23 +3,31 @@ import os
 import sqlite3
 import subprocess
 
-from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, QTabWidget
-from PyQt5.QtGui import QIcon
-from PyQt5 import uic, QtWidgets, Qt, QtCore, QtGui
+from PyQt5.QtCore import QTimer, QPoint
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, QTabWidget, QMenuBar, QMenu, QAction, \
+    QHBoxLayout, QPushButton, QLabel, QWidget
+from PyQt5.QtGui import QIcon, QPixmap, QFont
+from PyQt5 import uic, QtWidgets, QtCore, QtGui
 
-from config import pathAppData, pathBaseTheme, WINDOW_ICON_PATH, pathBaseControlPoint
+from config import pathAppData, pathBaseTheme, pathWindowIcon, pathBaseControlPoint
 
 from classes.Highlighter import Highlighter
 from classes.Settings import Settings
 
-from pyqtconsole.console import PythonConsole
+from PyQt5.QtCore import Qt
 
 
 class PipConsole(QtWidgets.QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setStyleSheet("font-size: 120px;")
 
+    def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
+        super().keyPressEvent(event)
+        if event.key() == 16777220:
+            res = os.popen(self.toPlainText()).read()
+            print(type(res))
+            self.insertPlainText(str(res))
 
 
 class EditorCode(QMainWindow):
@@ -33,6 +41,7 @@ class EditorCode(QMainWindow):
         self.dir_path = ""
         self.theme = "standard"
         self.font_family = ""
+        self.python_path = ""
 
         # Open Base Colors
         self.con_color = sqlite3.connect(pathBaseTheme, check_same_thread=False)
@@ -58,27 +67,23 @@ class EditorCode(QMainWindow):
                 )""")
 
         # Update
-        self.timer = QTimer()
-        self.timer.setInterval(500)
-        self.timer.timeout.connect(self.updateWindow)
-        self.timer.start()
+        self.updater = QTimer()
+        self.updater.setInterval(500)
+        self.updater.timeout.connect(self.updateWindow)
+        self.updater.start()
 
         # Set Console Settings
-        self.tabWidget: QTabWidget = self.tabWidget
+        self.pipConsole = PipConsole(self)
+
         self.tabWidget.removeTab(1)
-        self.tabWidget.addTab(PipConsole(), "Python Console")
-        self.tabWidget.setFixedHeight(180)
+        self.tabWidget.addTab(self.pipConsole, "Pip Console")
 
         # Set Widget Settings
         self.set_icons()
         self.set_commands()
-        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family"])
+        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family", "python_path"])
         self.open_file()
         self.open_folder()
-
-        self.setBackgroundRole(QtGui.QPalette.Highlight)
-
-        # self.treeView.setFixedWidth(300)
 
     def selectFile(self, index):
         path = self.sender().model().filePath(index)
@@ -100,11 +105,13 @@ class EditorCode(QMainWindow):
                 "file_type": self.file_type,
                 "dir_path": self.dir_path,
                 "theme": self.theme,
-                "font_family": self.font_family
+                "font_family": self.font_family,
+                "python_path": self.python_path
             }
             json.dump(data, sett_file, indent=4)
 
     def create_file(self):
+        print(self.sender().text())
         if self.sender().text() == "Python File":
             name, ok_pressed = QInputDialog().getText(self, "New Python file", "")
 
@@ -181,9 +188,9 @@ class EditorCode(QMainWindow):
         self.model.setRootPath(self.dir_path)
 
         self.treeView.setModel(self.model)
-        self.treeView.setAnimated(False)
+        self.treeView.setAnimated(True)
         self.treeView.setIndentation(20)
-        self.treeView.setSortingEnabled(False)
+        self.treeView.setSortingEnabled(True)
         self.treeView.setRootIndex(self.model.index(self.dir_path))
         self.treeView.doubleClicked.connect(self.selectFile)
 
@@ -193,7 +200,7 @@ class EditorCode(QMainWindow):
             error = b"Invalid File Name"
 
         else:
-            command = f"python {self.file_path}"
+            command = f"{self.python_path} {self.file_path}"
             self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                             shell=True, start_new_session=True)
             output, error = self.process.communicate()
@@ -225,7 +232,7 @@ class EditorCode(QMainWindow):
         # Load Updating Settings
         self.load_settings(["theme", "font_family"])
 
-        # Set Window Title
+        # Set Current File
         if len(self.file_path) > 0 and os.path.exists(self.file_path):
             self.currentFile.setText(f" {self.file_path}")
         else:
@@ -236,12 +243,15 @@ class EditorCode(QMainWindow):
 
         # Set Widget Color Scheme
         widget_colors = \
-        self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0]
+            self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0]
         self.setStyleSheet(widget_colors)
 
         # Set Font
-        self.codeEdit.setStyleSheet(f"font-family: {self.font_family}")
-        self.console.setStyleSheet(f"font-family: {self.font_family}")
+        self.codeEdit.setStyleSheet(f"font-family: {self.font_family};")
+        self.console.setStyleSheet(f"font-family: {self.font_family};")
+        self.pipConsole.setStyleSheet(f"font-family: {self.font_family}; font-size: 12px;")
+        self.pipConsole.setStyleSheet("font-size: 12;")
+        print(self.pipConsole.styleSheet())
 
         # Data Transfer To Settings
         self.settApp.colors = widget_colors
@@ -257,13 +267,7 @@ class EditorCode(QMainWindow):
             self.highlight = Highlighter(self.codeEdit.document(), colors=colors)
 
         except Exception:
-            quotation_color = self.styleSheet().split("\n")[1].split()[-1].replace(";", "")
-            self.highlight = Highlighter(self.codeEdit.document(), colors={"keyboard": "#000000",
-                                                                           "keyboardPattern": [],
-                                                                           "class": "#000000",
-                                                                           "multiLineComment": "#000000",
-                                                                           "quotation": quotation_color,
-                                                                           "function": "#000000"})
+            self.highlight = None
 
     def createControlPoint(self):
         try:
@@ -308,7 +312,7 @@ class EditorCode(QMainWindow):
 
     def set_icons(self):
         # Window
-        self.setWindowIcon(QIcon(WINDOW_ICON_PATH))
+        self.setWindowIcon(QIcon(pathWindowIcon))
 
         # Buttons
         self.startButton.setIcon(QIcon(pathAppData + "icon/startButton.ico"))
@@ -326,7 +330,7 @@ class EditorCode(QMainWindow):
         self.actionFolder.triggered.connect(self.open_folder)
         self.actionSettings.triggered.connect(lambda func: self.settApp.show())
         self.actionClose.triggered.connect(self.closeFile)
-        self.actionExit.triggered.connect(self.close)
+        self.actionExit_2.triggered.connect(self.close)
 
         self.actionCreate_Control_Point.triggered.connect(self.createControlPoint)
         self.actionLoad_Control_Point.triggered.connect(self.loadControlPoint)
