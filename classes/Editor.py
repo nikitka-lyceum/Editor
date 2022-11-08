@@ -77,6 +77,7 @@ class EditorCode(QMainWindow):
 
         self.tabWidget.removeTab(1)
         self.tabWidget.addTab(self.pipConsole, "Pip Console")
+        self.tabWidget.setFixedHeight(250)
 
         # Set Widget Settings
         self.set_icons()
@@ -230,7 +231,7 @@ class EditorCode(QMainWindow):
         self.save_file()
 
         # Load Updating Settings
-        self.load_settings(["theme", "font_family"])
+        self.load_settings(["theme", "font_family", "python_path"])
 
         # Set Current File
         if len(self.file_path) > 0 and os.path.exists(self.file_path):
@@ -251,6 +252,12 @@ class EditorCode(QMainWindow):
         self.console.setStyleSheet(f"font-family: {self.font_family};")
         self.pipConsole.setStyleSheet(f"font-family: {self.font_family}; font-size: 12px;")
         self.pipConsole.setStyleSheet("font-size: 12;")
+
+        # Try Set Python Version
+        try:
+            self.pythonVersion.setText(os.popen(f"{self.python_path} -V", ).read().strip())
+        except Exception:
+            self.pythonVersion.setText("No Interpreter")
 
         # Data Transfer To Settings
         self.settApp.colors = widget_colors
