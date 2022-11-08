@@ -2,6 +2,7 @@ import json
 import os
 import sqlite3
 import subprocess
+import time
 
 from PyQt5.QtCore import QTimer, QPoint
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, QTabWidget, QMenuBar, QMenu, QAction, \
@@ -20,14 +21,26 @@ from PyQt5.QtCore import Qt
 class PipConsole(QtWidgets.QTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet("font-size: 120px;")
+        self.setStyleSheet("color: black;")
+
+        self.updater = QTimer()
+        self.updater.setInterval(500)
+        self.updater.timeout.connect(self.updateConsole)
+
 
     def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
         super().keyPressEvent(event)
         if event.key() == 16777220:
-            res = os.popen(self.toPlainText()).read()
-            print(type(res))
-            self.insertPlainText(str(res))
+            self.updater.start()
+
+
+    def updateConsole(self):
+        res = os.popen(self.toPlainText()).read()
+        print(type(res))
+        self.insertPlainText(str(res))
+
+        QSleep
+        self.updater.stop()
 
 
 class EditorCode(QMainWindow):
@@ -78,6 +91,9 @@ class EditorCode(QMainWindow):
         self.tabWidget.removeTab(1)
         self.tabWidget.addTab(self.pipConsole, "Pip Console")
         self.tabWidget.setFixedHeight(250)
+
+        # Set Code Edit Settings
+        self.codeEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
 
         # Set Widget Settings
         self.set_icons()
