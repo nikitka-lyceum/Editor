@@ -1,5 +1,6 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
+# Console print()
 
 from PySide6.QtCore import Slot, Qt, QRect, QSize
 from PySide6.QtGui import QColor, QPainter, QTextFormat

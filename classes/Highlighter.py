@@ -37,17 +37,15 @@ class Highlighter(QtGui.QSyntaxHighlighter):
         self.highlightingRules.append((QtCore.QRegExp("'.*'"),
                                        quotationFormat))
 
+        functionFormat = QtGui.QTextCharFormat()
+        functionFormat.setForeground(QColor(colors["function"]))
+        self.highlightingRules.append((QtCore.QRegExp("\\b[A-Za-z0-9_]+(?=\\()"),
+                                       functionFormat))
 
         self.multiLineCommentFormat = QtGui.QTextCharFormat()
         self.multiLineCommentFormat.setForeground(QColor(colors["multiLineComment"]))
         self.highlightingRules.append((QtCore.QRegExp(r"#.*"), self.multiLineCommentFormat))
         self.highlightingRules.append((QtCore.QRegExp(r'""".*"""'), self.multiLineCommentFormat))
-
-
-        functionFormat = QtGui.QTextCharFormat()
-        functionFormat.setForeground(QColor(colors["function"]))
-        self.highlightingRules.append((QtCore.QRegExp("\\b[A-Za-z0-9_]+(?=\\()"),
-                                       functionFormat))
 
 
         self.commentStartExpression = QtCore.QRegExp("/\\*")

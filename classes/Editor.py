@@ -60,8 +60,8 @@ class EditorCode(QMainWindow):
         self.updater.start()
 
         # Set Console Settings
-        self.tabWidget.removeTab(1)
-        self.tabWidget.setFixedHeight(250)
+        self.consolesTab.removeTab(1)
+        self.consolesTab.setFixedHeight(250)
 
         # Set Code Edit Settings
         self.codeEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
@@ -237,8 +237,6 @@ class EditorCode(QMainWindow):
         # Set Font
         self.codeEdit.setStyleSheet(f"font-family: {self.font_family};")
         self.console.setStyleSheet(f"font-family: {self.font_family};")
-        self.pipConsole.setStyleSheet(f"font-family: {self.font_family}; font-size: 12px;")
-        self.pipConsole.setStyleSheet("font-size: 12;")
 
         # Try Set Python Version
         try:
@@ -248,7 +246,6 @@ class EditorCode(QMainWindow):
 
         # Data Transfer
         self.settApp.colors = widget_colors
-        self.pipConsole.colors = widget_colors
 
         try:
             # Try Get Code Color Scheme
