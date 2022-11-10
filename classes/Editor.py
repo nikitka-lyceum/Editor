@@ -4,7 +4,7 @@ import sqlite3
 import subprocess
 import time
 
-from PyQt5.QtCore import QTimer, QPoint
+from PyQt5.QtCore import QTimer, QPoint, QThread
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, QTabWidget, QMenuBar, QMenu, QAction, \
     QHBoxLayout, QPushButton, QLabel, QWidget
 from PyQt5.QtGui import QIcon, QPixmap, QFont
@@ -15,32 +15,6 @@ from config import pathAppData, pathBaseTheme, pathWindowIcon, pathBaseControlPo
 from classes.Highlighter import Highlighter
 from classes.Settings import Settings
 
-from PyQt5.QtCore import Qt
-
-
-class PipConsole(QtWidgets.QTextEdit):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setStyleSheet("color: black;")
-
-        self.updater = QTimer()
-        self.updater.setInterval(500)
-        self.updater.timeout.connect(self.updateConsole)
-
-
-    def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
-        super().keyPressEvent(event)
-        if event.key() == 16777220:
-            self.updater.start()
-
-
-    def updateConsole(self):
-        res = os.popen(self.toPlainText()).read()
-        print(type(res))
-        self.insertPlainText(str(res))
-
-        QSleep
-        self.updater.stop()
 
 
 class EditorCode(QMainWindow):
@@ -86,10 +60,7 @@ class EditorCode(QMainWindow):
         self.updater.start()
 
         # Set Console Settings
-        self.pipConsole = PipConsole(self)
-
         self.tabWidget.removeTab(1)
-        self.tabWidget.addTab(self.pipConsole, "Pip Console")
         self.tabWidget.setFixedHeight(250)
 
         # Set Code Edit Settings
@@ -275,8 +246,9 @@ class EditorCode(QMainWindow):
         except Exception:
             self.pythonVersion.setText("No Interpreter")
 
-        # Data Transfer To Settings
+        # Data Transfer
         self.settApp.colors = widget_colors
+        self.pipConsole.colors = widget_colors
 
         try:
             # Try Get Code Color Scheme

@@ -125,7 +125,7 @@
      </layout>
     </item>
     <item row="2" column="0" colspan="2">
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="consolesTab">
       <property name="tabShape">
        <enum>QTabWidget::Triangular</enum>
       </property>
@@ -209,7 +209,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>   </string>
+         <string/>
         </property>
        </widget>
       </item>
