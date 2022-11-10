@@ -243,7 +243,6 @@
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionFind"/>
     <addaction name="actionCreate_Control_Point"/>
     <addaction name="actionLoad_Control_Point"/>
    </widget>
@@ -392,6 +391,12 @@
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>

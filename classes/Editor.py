@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, Q
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5 import uic, QtWidgets, QtCore, QtGui
 
-from config import pathAppData, pathBaseTheme, pathWindowIcon, pathBaseControlPoint
+from config import pathAppData, pathBaseTheme, pathWindowIcon, pathBaseControlPoint, pathIcons
 
 from classes.Highlighter import Highlighter
 from classes.Settings import Settings
@@ -306,8 +306,12 @@ class EditorCode(QMainWindow):
         self.setWindowIcon(QIcon(pathWindowIcon))
 
         # Buttons
-        self.startButton.setIcon(QIcon(pathAppData + "icon/startButton.ico"))
-        self.stopButton.setIcon(QIcon(pathAppData + "icon/stopButton.ico"))
+        self.startButton.setIcon(QIcon(pathIcons + "startButton.ico"))
+        self.stopButton.setIcon(QIcon(pathIcons + "stopButton.ico"))
+
+        # Menu
+        self.menuOpen.setIcon(QIcon(pathIcons + "open.png"))
+        self.actionSettings.setIcon(QIcon(pathIcons + "settings.png"))
 
     def set_commands(self):
         # Menu button

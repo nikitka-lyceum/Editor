@@ -35,8 +35,8 @@ class Settings(QWidget):
 
         self.styleList.clear()
         self.styleList.addItems(allStyles)
-        index_current = self.styleList.findText(self.theme)
-        self.styleList.setCurrentIndex(index_current)
+        style_index_current = self.styleList.findText(self.theme)
+        self.styleList.setCurrentIndex(style_index_current)
 
         self.fontList.setCurrentFont(QFont(self.font_family))
         self.pythonPath.setText(self.python_path)
