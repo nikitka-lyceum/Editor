@@ -4,7 +4,7 @@ import sqlite3
 import subprocess
 import time
 
-from PyQt5.QtCore import QTimer, QPoint, QThread
+from PyQt5.QtCore import QTimer, QPoint, QThread, QProcess
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, QTabWidget, QMenuBar, QMenu, QAction, \
     QHBoxLayout, QPushButton, QLabel, QWidget
 from PyQt5.QtGui import QIcon, QPixmap, QFont
@@ -189,20 +189,25 @@ class EditorCode(QMainWindow):
             error = b"Invalid File Name"
 
         else:
-            command = f"{self.python_path} {os.path.abspath(self.file_path)}"
-            self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                            shell=True, start_new_session=True)
+            # command = f"{self.python_path} {os.path.abspath(self.file_path)}"
+            # self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            #                                 shell=True)
 
-            output, error = self.process.communicate(timeout=2)
-            if error is None:
-                error = ""
+            # output, error = self.process.communicate()
+            # if error is None:
+            #     error = ""
+            p = QProcess()
+            # p.readyReadStandardOutput(lambda x: print(x))
+            # p.readyReadStandardError(lambda x: print(x))
+            p.start(self.python_path, [self.file_path])
+            print(p.d)
 
-        console_text = f"===== {self.file_path} =====<br><br>"
-        console_text += "{}<br>".format(output.decode('utf-8').replace('\n', '<br>'))
-        # print("".join(map(chr, error)))
-        console_text += f'<span style="color: #e34034;">{error.decode("utf-8")}</span>'
+        # console_text = f"===== {self.file_path} =====<br><br>"
+        # console_text += "{}<br>".format(output.decode('utf-8').replace('\n', '<br>'))
+        # console_text += f'<span style="color: #e34034;">{error.decode("utf-8")}</span>'
 
-        self.console.setHtml(console_text)
+        # self.console.setHtml(console_text)
+
 
     def stopCode(self):
         pass

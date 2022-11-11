@@ -1,5 +1,5 @@
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QFont
 
 
 class Highlighter(QtGui.QSyntaxHighlighter):
@@ -54,6 +54,10 @@ class Highlighter(QtGui.QSyntaxHighlighter):
         self.multiLineCommentFormat.setForeground(QColor(colors["multiLineComment"]))
         self.highlightingRules.append((QtCore.QRegExp("#.*"), self.multiLineCommentFormat))
         self.highlightingRules.append((QtCore.QRegExp('""".*"""'), self.multiLineCommentFormat))
+
+        variableFormat = QtGui.QTextCharFormat()
+        variableFormat.setFontWeight(QFont.DemiBold)
+        self.highlightingRules.append((QtCore.QRegExp("\\b\\.[0-9A-Za-z]+\\b"), variableFormat))
 
 
         self.commentStartExpression = QtCore.QRegExp("/\\*")
