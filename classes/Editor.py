@@ -10,11 +10,10 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, Q
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5 import uic, QtWidgets, QtCore, QtGui
 
-from config import pathAppData, pathBaseTheme, pathWindowIcon, pathBaseControlPoint, pathIcons
+from config import pathAppData, pathBaseTheme, pathWindowIcon, pathBaseControlPoint, pathIcons, allEncodings
 
 from classes.Highlighter import Highlighter
 from classes.Settings import Settings
-
 
 
 class EditorCode(QMainWindow):
@@ -29,6 +28,7 @@ class EditorCode(QMainWindow):
         self.theme = "standard"
         self.font_family = ""
         self.python_path = ""
+        self.encoding = ""
 
         # Open Base Colors
         self.con_color = sqlite3.connect(pathBaseTheme, check_same_thread=False)
@@ -69,9 +69,13 @@ class EditorCode(QMainWindow):
         # Set Widget Settings
         self.set_icons()
         self.set_commands()
-        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family", "python_path"])
+        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family", "python_path", "encoding"])
         self.open_file()
         self.open_folder()
+
+        # Loads All Encodings
+        self.encodingList.addItems(allEncodings)
+        self.encodingList.setCurrentIndex(self.encodingList.findText(self.encoding))
 
     def selectFile(self, index):
         path = self.sender().model().filePath(index)
@@ -94,16 +98,15 @@ class EditorCode(QMainWindow):
                 "dir_path": self.dir_path,
                 "theme": self.theme,
                 "font_family": self.font_family,
-                "python_path": self.python_path
+                "python_path": self.python_path,
+                "encoding": self.encoding
             }
             json.dump(data, sett_file, indent=4)
 
     def create_file(self):
-        print(self.sender().text())
         if self.sender().text() == "Python File":
             name, ok_pressed = QInputDialog().getText(self, "New Python file", "")
-
-            if ".py" not in name[-2:]:
+            if ".py" not in name[-3:]:
                 self.file_type = ".py"
                 name += ".py"
 
@@ -116,7 +119,7 @@ class EditorCode(QMainWindow):
         if ok_pressed:
             self.file_path = name
 
-            with open(self.file_path, mode="w+", encoding="utf-8"):
+            with open(self.file_path, mode="w+", encoding=self.encoding):
                 pass
 
             self.codeEdit.clear()
@@ -132,7 +135,7 @@ class EditorCode(QMainWindow):
             pass
 
         if os.path.exists(self.file_path):
-            with open(self.file_path, "w", encoding="utf-8") as save_file:
+            with open(self.file_path, "w", encoding=self.encoding) as save_file:
                 save_file.write(self.codeEdit.toPlainText())
 
     def open_file(self):
@@ -154,11 +157,8 @@ class EditorCode(QMainWindow):
             pass
 
         if os.path.exists(self.file_path):
-            try:
-                with open(self.file_path, mode="r", encoding="utf-8") as open_file:
-                    self.codeEdit.setPlainText(open_file.read())
-            except Exception:
-                pass
+            with open(self.file_path, mode="r", encoding=self.encoding) as open_file:
+                self.codeEdit.setPlainText(open_file.read())
 
     def open_folder(self):
         if not (self.sender() is None):
@@ -188,16 +188,18 @@ class EditorCode(QMainWindow):
             error = b"Invalid File Name"
 
         else:
-            command = f"{self.python_path} {self.file_path}"
+            command = f"{self.python_path} {os.path.abspath(self.file_path)}"
             self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                             shell=True, start_new_session=True)
-            output, error = self.process.communicate()
+
+            output, error = self.process.communicate(timeout=2)
             if error is None:
                 error = ""
 
-        console_text = f"===== {self.file_path}=====<br><br>"
+        console_text = f"===== {self.file_path} =====<br><br>"
         console_text += "{}<br>".format(output.decode('utf-8').replace('\n', '<br>'))
-        console_text += f'<span style="color: #e34034;" align="center">{error.decode("utf-8")}</span>'
+        # print("".join(map(chr, error)))
+        console_text += f'<span style="color: #e34034;">{error.decode("utf-8")}</span>'
 
         self.console.setHtml(console_text)
 
@@ -217,6 +219,9 @@ class EditorCode(QMainWindow):
         # Save Changes
         self.save_file()
 
+        # Update Encoding
+        self.encoding = self.encodingList.currentText()
+
         # Load Updating Settings
         self.load_settings(["theme", "font_family", "python_path"])
 
@@ -226,39 +231,42 @@ class EditorCode(QMainWindow):
         else:
             self.currentFile.setText("")
 
-        # Set Standard Type
-        self.file_type = os.path.splitext(self.file_path)[-1]
-
-        # Set Widget Color Scheme
-        widget_colors = \
-            self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0]
-        self.setStyleSheet(widget_colors)
-
-        # Set Font
-        self.codeEdit.setStyleSheet(f"font-family: {self.font_family};")
-        self.console.setStyleSheet(f"font-family: {self.font_family};")
-
         # Try Set Python Version
         try:
             self.pythonVersion.setText(os.popen(f"{self.python_path} -V", ).read().strip())
         except Exception:
             self.pythonVersion.setText("No Interpreter")
 
-        # Data Transfer
-        self.settApp.colors = widget_colors
+        # Set Standard Type
+        self.file_type = os.path.splitext(self.file_path)[-1]
 
+        # Set Font
+        self.codeEdit.setStyleSheet(f"font-family: {self.font_family};")
+        self.console.setStyleSheet(f"font-family: {self.font_family};")
+
+        # Set Code Color Scheme
         try:
-            # Try Get Code Color Scheme
             colors = json.loads(
                 self.cur_color.execute(
                     """SELECT colors FROM code_themes WHERE file_type=? AND name=?""",
                     (self.file_type, self.theme)).fetchall()[0][0])
 
-            # Set Color Scheme
             self.highlight = Highlighter(self.codeEdit.document(), colors=colors)
 
         except Exception:
             self.highlight = None
+
+
+
+
+        # Set Widget Color Scheme
+        widget_colors = \
+            self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0]
+        self.setStyleSheet(widget_colors)
+
+        # Data Transfer To Settings
+        self.settApp.colors = widget_colors
+        self.settApp.encoding = self.encoding
 
     def createControlPoint(self):
         try:
@@ -306,12 +314,13 @@ class EditorCode(QMainWindow):
         self.setWindowIcon(QIcon(pathWindowIcon))
 
         # Buttons
-        self.startButton.setIcon(QIcon(pathIcons + "startButton.ico"))
-        self.stopButton.setIcon(QIcon(pathIcons + "stopButton.ico"))
+        self.startButton.setIcon(QIcon(pathIcons + "run.png"))
+        self.startButton.setIconSize(QIcon(pathIcons + "run.png").availableSizes()[0])
+        self.stopButton.setIcon(QIcon(pathIcons + "stop.png"))
 
         # Menu
         self.menuOpen.setIcon(QIcon(pathIcons + "open.png"))
-        self.actionSettings.setIcon(QIcon(pathIcons + "settings.png"))
+        self.actionRun.setIcon(QIcon(pathIcons + "run.png"))
 
     def set_commands(self):
         # Menu button
@@ -326,6 +335,8 @@ class EditorCode(QMainWindow):
         self.actionSettings.triggered.connect(lambda func: self.settApp.show())
         self.actionClose.triggered.connect(self.closeFile)
         self.actionExit_2.triggered.connect(self.close)
+
+        self.actionRun.triggered.connect(self.runCode)
 
         self.actionCreate_Control_Point.triggered.connect(self.createControlPoint)
         self.actionLoad_Control_Point.triggered.connect(self.loadControlPoint)

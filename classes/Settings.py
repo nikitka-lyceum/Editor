@@ -1,4 +1,3 @@
-import os
 import re
 
 from PyQt5.QtCore import QTimer
@@ -25,7 +24,7 @@ class Settings(QWidget):
 
         self.set_icons()
         self.set_commands()
-        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family", "python_path"])
+        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family", "python_path", "encoding"])
 
     def load_settings(self, toRecord):
         with open(pathAppData + "settings.json", encoding="utf-8") as sett_file:
@@ -50,7 +49,8 @@ class Settings(QWidget):
                 "dir_path": self.dir_path,
                 "theme": self.theme,
                 "font_family": self.font_family,
-                "python_path": self.python_path
+                "python_path": self.python_path,
+                "encoding": self.encoding
             }
             json.dump(data, sett_file, indent=4)
 

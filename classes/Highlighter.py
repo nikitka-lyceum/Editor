@@ -44,8 +44,8 @@ class Highlighter(QtGui.QSyntaxHighlighter):
 
         self.multiLineCommentFormat = QtGui.QTextCharFormat()
         self.multiLineCommentFormat.setForeground(QColor(colors["multiLineComment"]))
-        self.highlightingRules.append((QtCore.QRegExp(r"#.*"), self.multiLineCommentFormat))
-        self.highlightingRules.append((QtCore.QRegExp(r'""".*"""'), self.multiLineCommentFormat))
+        self.highlightingRules.append((QtCore.QRegExp("#.*"), self.multiLineCommentFormat))
+        self.highlightingRules.append((QtCore.QRegExp('""".*"""'), self.multiLineCommentFormat))
 
 
         self.commentStartExpression = QtCore.QRegExp("/\\*")

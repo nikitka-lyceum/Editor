@@ -4,5 +4,6 @@
     "dir_path": "D:/Programming_languages/Python/MyPythonEditor",
     "theme": "monokai",
     "font_family": "MS Shell Dlg 2",
-    "python_path": "C:/Users/PC/AppData/Local/Programs/Python/Python38/python.exe"
+    "python_path": "C:/Users/PC/AppData/Local/Programs/Python/Python38/python.exe",
+    "encoding": "ascii"
 }
