@@ -20,7 +20,7 @@ class Highlighter(QtGui.QSyntaxHighlighter):
         selfFormat = QtGui.QTextCharFormat()
         selfFormat.setForeground(QColor("#8F4C61"))
         self.highlightingRules.append((QtCore.QRegExp("\\bself\\b"), selfFormat))
-        print(5)
+
         numberFormat = QtGui.QTextCharFormat()
         numberFormat.setForeground(QColor(colors["number"]))
         self.highlightingRules.append((QtCore.QRegExp("\\b[0-9]+\\b"), numberFormat))
