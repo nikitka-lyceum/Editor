@@ -1,29 +1,42 @@
-*{
-    color: #ffffff;
-    background-color: #3c3f41;
-}
-
-#treeView, #codeEdit, #tabWidget, #console, QHeaderView::section, QTabBar::tab:selected, QTabBar::tab:hover{
-    background-color:  #272822;
-}
-
-#startButton, #stopButton, QTabWidget::pane, QTabWidget::tab-bar, QTabBar::tab{
-    background-color: #3c3f41;
-}
-
-#startButton:pressed, #stopButton:pressed{
-    background-color: rgb(230, 230, 230);
-}
-
-QMenu::item:selected {
-    background-color: rgb(85, 113, 210);
-}
-
-QTabWidget::pane {
-    border-top: 1px solid #C2C7CB;
-}
-
-#applyButton{
-    background-color: #365880;
-    color: #ffffff;
+{
+  "keyboard": "#64d4e9",
+  "keyboardPattern": [
+    "\\band\\b",
+    "\\bassert\\b",
+    "\\bbreak\\b",
+    "\\bclass\\b",
+    "\\bcontinue\\b",
+    "\\bdef\\b",
+    "\\bdel\\b",
+    "\\belif\\b",
+    "\\belse\\b",
+    "\\bexcept\\b",
+    "\\bexec\\b",
+    "\\bfinally\\b",
+    "\\bfor\\b",
+    "\\bfrom\\b",
+    "\\bglobal\\b",
+    "\\bif\\b",
+    "\\bimport\\b",
+    "\\bin\\b",
+    "\\bis\\b",
+    "\\blambda\\b",
+    "\\bnot\\b",
+    "\\bor\\b",
+    "\\bpass\\b",
+    "\\bprint\\b",
+    "\\braise\\b",
+    "\\breturn\\b",
+    "\\btry\\b",
+    "\\bwhile\\b",
+    "\\byield\\b",
+    "\\bNone\\b",
+    "\\bTrue\\b",
+    "\\bFalse\\b"
+  ],
+  "number": "#ae81ff",
+  "class": "#7ac32c",
+  "multiLineComment": "#6e6e6e",
+  "quotation": "#d7d472",
+  "function": "#88dc28"
 }

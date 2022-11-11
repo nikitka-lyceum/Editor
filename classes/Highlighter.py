@@ -17,6 +17,14 @@ class Highlighter(QtGui.QSyntaxHighlighter):
         self.highlightingRules = [(QtCore.QRegExp(pattern), keywordFormat)
                                   for pattern in keywordPatterns]
 
+        selfFormat = QtGui.QTextCharFormat()
+        selfFormat.setForeground(QColor("#8F4C61"))
+        self.highlightingRules.append((QtCore.QRegExp("\\bself\\b"), selfFormat))
+        print(5)
+        numberFormat = QtGui.QTextCharFormat()
+        numberFormat.setForeground(QColor(colors["number"]))
+        self.highlightingRules.append((QtCore.QRegExp("\\b[0-9]+\\b"), numberFormat))
+
         classFormat = QtGui.QTextCharFormat()
         classFormat.setForeground(QColor(colors["class"]))
         self.highlightingRules.append((QtCore.QRegExp("\\bQ[A-Za-z]+\\b"),

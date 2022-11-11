@@ -55,7 +55,7 @@ class EditorCode(QMainWindow):
 
         # Update
         self.updater = QTimer()
-        self.updater.setInterval(500)
+        self.updater.setInterval(1000)
         self.updater.timeout.connect(self.updateWindow)
         self.updater.start()
 
@@ -65,6 +65,7 @@ class EditorCode(QMainWindow):
 
         # Set Code Edit Settings
         self.codeEdit.setWordWrapMode(QtGui.QTextOption.NoWrap)
+        self.codeEdit.setStyleSheet("selection-background-color: #8F4C61")
 
         # Set Widget Settings
         self.set_icons()
