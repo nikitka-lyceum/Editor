@@ -1,0 +1,1 @@
+print(b"hello нИКИТА".decode("ascii"))
