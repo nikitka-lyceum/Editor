@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog, QInputDialog, QTextEdit, Q
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5 import uic, QtWidgets, QtCore, QtGui
 
-from config import pathAppData, pathBaseTheme, pathWindowIcon, pathBaseControlPoint, pathIcons, allEncodings
+from config import pathAppData, pathBase, pathIcons, allEncodings
 
 from classes.Highlighter import Highlighter
 from classes.Settings import Settings
@@ -31,7 +31,7 @@ class EditorCode(QMainWindow):
         self.encoding = ""
 
         # Open Base Colors
-        self.con_color = sqlite3.connect(pathBaseTheme, check_same_thread=False)
+        self.con_color = sqlite3.connect(pathBase + "theme.sqlite", check_same_thread=False)
         self.cur_color = self.con_color.cursor()
         self.cur_color.execute("""CREATE TABLE IF NOT EXISTS code_themes(
             file_type TEXT,
@@ -45,7 +45,7 @@ class EditorCode(QMainWindow):
         )""")
 
         # Open Base Control Points
-        self.con_control_point = sqlite3.connect(pathBaseControlPoint, check_same_thread=False)
+        self.con_control_point = sqlite3.connect(pathBase + "controlPoint.sqlite", check_same_thread=False)
         self.cur_control_point = self.con_control_point.cursor()
         self.cur_control_point.execute("""CREATE TABLE IF NOT EXISTS points(
                     file_type TEXT,
@@ -189,24 +189,19 @@ class EditorCode(QMainWindow):
             error = b"Invalid File Name"
 
         else:
-            # command = f"{self.python_path} {os.path.abspath(self.file_path)}"
-            # self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            #                                 shell=True)
+            command = f"{self.python_path} {os.path.abspath(self.file_path)}"
+            self.process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                            shell=True)
 
-            # output, error = self.process.communicate()
-            # if error is None:
-            #     error = ""
-            p = QProcess()
-            # p.readyReadStandardOutput(lambda x: print(x))
-            # p.readyReadStandardError(lambda x: print(x))
-            p.start(self.python_path, [self.file_path])
-            print(p.d)
+            output, error = self.process.communicate()
+            if error is None:
+                error = ""
 
-        # console_text = f"===== {self.file_path} =====<br><br>"
-        # console_text += "{}<br>".format(output.decode('utf-8').replace('\n', '<br>'))
-        # console_text += f'<span style="color: #e34034;">{error.decode("utf-8")}</span>'
+        console_text = f"===== {self.file_path} =====<br><br>"
+        console_text += "{}<br>".format(output.decode('utf-8').replace('\n', '<br>'))
+        console_text += f'<span style="color: #e34034;">{error.decode("utf-8")}</span>'
 
-        # self.console.setHtml(console_text)
+        self.console.setHtml(console_text)
 
 
     def stopCode(self):
@@ -263,8 +258,6 @@ class EditorCode(QMainWindow):
             self.highlight = None
 
 
-
-
         # Set Widget Color Scheme
         widget_colors = \
             self.cur_color.execute("""SELECT colors FROM widget_themes WHERE name=?""", (self.theme,)).fetchall()[0][0]
@@ -317,7 +310,7 @@ class EditorCode(QMainWindow):
 
     def set_icons(self):
         # Window
-        self.setWindowIcon(QIcon(pathWindowIcon))
+        self.setWindowIcon(QIcon(pathIcons + "logo.png"))
 
         # Buttons
         self.startButton.setIcon(QIcon(pathIcons + "run.png"))

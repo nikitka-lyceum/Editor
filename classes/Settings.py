@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QFileDialog
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5 import uic
 
-from config import pathAppData, pathWindowIcon, allStyles
+from config import pathAppData, allStyles, pathIcons
 
 import json
 
@@ -78,7 +78,7 @@ class Settings(QWidget):
 
     def set_icons(self):
         # Window
-        self.setWindowIcon(QIcon(pathWindowIcon))
+        self.setWindowIcon(QIcon(pathIcons + "logo.png"))
 
     def set_commands(self):
         self.applyButton.clicked.connect(self.applySettings)

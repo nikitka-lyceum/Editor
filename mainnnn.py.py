@@ -1,7 +1,14 @@
-#import code
-#with open("test.py") as f:
-#    code.InteractiveConsole(locals=None, filename="test.py").runcode(f.read())
+from PyQt5.QtWidgets import QApplication, QMainWindow
+import sys
 
-#self.q1234 = 1
+class Example(QMainWindow):
+	def __init__(self):
+		super().__init__()
 
-print(5)
+if __name__ == "__main__":
+	app = QApplication(sys.argv)
+	
+	ex = Example()
+	ex.show()
+
+	sys.exit(app.exec())
