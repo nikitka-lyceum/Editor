@@ -112,7 +112,7 @@ class Ui_Settings(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
 
         self.retranslateUi(Form)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -123,7 +123,6 @@ class Ui_Settings(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.styleTab), _translate("Form", "Style"))
         self.label_3.setText(_translate("Form", "Python Path"))
         self.pythonPath.setText(_translate("Form", "Select Python Path"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.PythonInterpreterTab),
-                                  _translate("Form", "Python Interpreter"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.PythonInterpreterTab), _translate("Form", "Python Interpreter"))
         self.applyButton.setText(_translate("Form", "Применить"))
         self.canselButton.setText(_translate("Form", "Отмена"))

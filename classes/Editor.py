@@ -34,7 +34,7 @@ class EditorCode(QMainWindow, Ui_Editor):
 
         # Update
         self.updater = QTimer()
-        self.updater.setInterval(1000)
+        self.updater.setInterval(1500)
         self.updater.timeout.connect(self.updateWindow)
         self.updater.start()
 
@@ -47,16 +47,13 @@ class EditorCode(QMainWindow, Ui_Editor):
         self.codeEdit.setStyleSheet("selection-background-color: #8F4C61")
 
         # Set Widget Settings
-        try:
-            self.set_icons()
-            self.set_commands()
-            self.load_settings(
-                ["file_path", "file_type", "dir_path", "theme", "font_family", "python_path", "encoding"])
-            self.open_file()
-            self.open_folder()
-            self.connectBase()
-        except Exception as e:
-            print(e)
+        self.set_icons()
+        self.set_commands()
+        self.load_settings(["file_path", "file_type", "dir_path", "theme", "font_family", "python_path", "encoding"])
+        self.open_file()
+        self.open_folder()
+        self.connectBase()
+        self.updateWindow()
 
     def connectBase(self):
         # Open Base Colors
