@@ -189,10 +189,13 @@ class EditorCode(QMainWindow, Ui_Editor):
             self.currentFile.setText("")
 
         # Try Set Python Version
-        try:
-            self.pythonVersion.setText(os.popen(f"{self.python_path} -V", ).read().strip())
+        if self.python_path != "":
+            try:
+                self.pythonVersion.setText(os.popen(f"{self.python_path} -V", ).read().strip())
 
-        except Exception:
+            except Exception:
+                self.pythonVersion.setText("No Interpreter")
+        else:
             self.pythonVersion.setText("No Interpreter")
 
         # Set Standard Type
