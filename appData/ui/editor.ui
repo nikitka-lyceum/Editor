@@ -246,12 +246,6 @@
     <addaction name="actionCreate_Control_Point"/>
     <addaction name="actionLoad_Control_Point"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionInstruction_Git"/>
-   </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
      <string>File</string>
@@ -289,7 +283,6 @@
    <addaction name="menu"/>
    <addaction name="menuEdit"/>
    <addaction name="menuRun"/>
-   <addaction name="menuHelp"/>
   </widget>
   <action name="actionSave">
    <property name="text">
