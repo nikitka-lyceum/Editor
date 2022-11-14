@@ -6,16 +6,16 @@ class Highlighter(QtGui.QSyntaxHighlighter):
     def __init__(self, parent=None, colors=None):
         super(Highlighter, self).__init__(parent)
 
-        if colors is None or colors == {}:
-            return
-
         keywordFormat = QtGui.QTextCharFormat()
         keywordFormat.setForeground(QColor(colors["keyboard"]))
-
         keywordPatterns = colors["keyboardPattern"]
 
         self.highlightingRules = [(QtCore.QRegExp(pattern), keywordFormat)
                                   for pattern in keywordPatterns]
+
+        variableFormat = QtGui.QTextCharFormat()
+        variableFormat.setFontWeight(QFont.Cursive)
+        self.highlightingRules.append((QtCore.QRegExp("\\b\\.[0-9A-Za-z_]+\\b"), variableFormat))
 
         selfFormat = QtGui.QTextCharFormat()
         selfFormat.setForeground(QColor("#8F4C61"))
@@ -54,11 +54,6 @@ class Highlighter(QtGui.QSyntaxHighlighter):
         self.multiLineCommentFormat.setForeground(QColor(colors["multiLineComment"]))
         self.highlightingRules.append((QtCore.QRegExp("#.*"), self.multiLineCommentFormat))
         self.highlightingRules.append((QtCore.QRegExp('""".*"""'), self.multiLineCommentFormat))
-
-        variableFormat = QtGui.QTextCharFormat()
-        variableFormat.setFontWeight(QFont.DemiBold)
-        self.highlightingRules.append((QtCore.QRegExp("\\b\\.[0-9A-Za-z]+\\b"), variableFormat))
-
 
         self.commentStartExpression = QtCore.QRegExp("/\\*")
         self.commentEndExpression = QtCore.QRegExp("\\*/")

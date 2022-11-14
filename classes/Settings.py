@@ -1,20 +1,28 @@
 import re
 
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QWidget, QFileDialog
+from PyQt5.QtWidgets import QWidget, QFileDialog, QMainWindow
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5 import uic
 
+from appData.ui.settingsUi import Ui_Settings
 from config import pathAppData, allStyles, pathIcons
 
 import json
 
 
-class Settings(QWidget):
+class Settings(QWidget, Ui_Settings):
     def __init__(self):
         super().__init__()
-        uic.loadUi(pathAppData + "settings.ui", self)
+        self.setupUi(self)
 
+        self.file_path = ""
+        self.file_type = ""
+        self.dir_path = ""
+        self.theme = "standard"
+        self.font_family = ""
+        self.python_path = ""
+        self.encoding = ""
         self.colors = ""
 
         self.timer = QTimer()

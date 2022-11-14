@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>341</width>
-    <height>366</height>
+    <width>623</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="styleTab">
       <attribute name="title">
@@ -43,8 +43,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>297</width>
-            <height>271</height>
+            <width>579</width>
+            <height>294</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -54,6 +54,13 @@
               <widget class="QLabel" name="label">
                <property name="text">
                 <string>Style</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
                </property>
               </widget>
              </item>
@@ -68,6 +75,13 @@
               <widget class="QLabel" name="label_2">
                <property name="text">
                 <string>Font Code</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
                </property>
               </widget>
              </item>
@@ -118,8 +132,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>297</width>
-            <height>271</height>
+            <width>579</width>
+            <height>294</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -159,11 +173,6 @@
         </widget>
        </item>
       </layout>
-     </widget>
-     <widget class="QWidget" name="tab_3">
-      <attribute name="title">
-       <string>Page</string>
-      </attribute>
      </widget>
     </widget>
    </item>
