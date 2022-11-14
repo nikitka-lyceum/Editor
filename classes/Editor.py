@@ -361,6 +361,5 @@ class EditorCode(QMainWindow, Ui_Editor):
         self.write_settings()
 
         self.settApp.close()
-
         self.con_color.close()
         self.con_control_point.close()
