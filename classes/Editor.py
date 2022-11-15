@@ -122,7 +122,7 @@ class EditorCode(QMainWindow, Ui_Editor):
                 save_file.write(self.codeEdit.toPlainText())
 
     def open_file(self):
-        if not (self.sender() is None):
+        try:
             if self.sender().text() == "Python File":
                 self.file_path, self.file_type = QFileDialog.getOpenFileName(self,
                                                                              'Select python file',
@@ -135,6 +135,9 @@ class EditorCode(QMainWindow, Ui_Editor):
                                                                              'Select File',
                                                                              '',
                                                                              options=QFileDialog.DontUseNativeDialog)
+
+        except Exception:
+            pass
 
         if os.path.exists(self.file_path):
             with open(self.file_path, mode="r", encoding=self.encoding) as open_file:
